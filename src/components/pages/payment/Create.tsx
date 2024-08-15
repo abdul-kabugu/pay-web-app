@@ -26,11 +26,13 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select"
+import axios from 'axios'
+import { toast } from '@/components/ui/use-toast'
  
 const formSchema = z.object({
   linkName: z.string(),
   paymentType : z.string(),
-  amount : z.number().min(1, {
+  amount : z.coerce.number().min(1, {
     message  : "Amount must be  greater than 1"
   }),
   //supportedTokens : z.string(),  DISBLED  PAYMENT TOKENS  PARAM
@@ -41,7 +43,8 @@ const formSchema = z.object({
   paymentTag : z.string(),
   labelText : z.string(),
   redirectUrl : z.string(),
-  recieverWallet :  z.string()
+  userId : z.string(),
+ // recieverWallet :  z.string()
 
 })
 
@@ -80,17 +83,40 @@ export default function Create() {
       redirectUrl : "",
       paymentTag : "",
       labelText : "",
-      recieverWallet : ""
+      //recieverWallet : "",
+      userId  :  ""
      
     },
   })
+
+
+       const  PAY_BASE_URL = `http://localhost:5000/pay/`
  
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+  const onSubmit  =  async (values: z.infer<typeof formSchema>)=>{
+
+    try {
+      const  res  = await  axios.post(`${PAY_BASE_URL}create-link`,  values)
+         toast({
+          title  : "New ;onk created",
+          description :  "Youve  succefully created new payment link"
+         })
+
+           console.log(res.status)
+      
+    } catch (error) {
+       console.log("error", error)
+       toast({
+        title : "something went wrong",
+        description  : "something went wrong check consol"
+       })
+      
+    }
+      
+
+        
     console.log("the value", values)
-    alert(values)
+   
   }
 
 
@@ -167,13 +193,29 @@ export default function Create() {
                                    <FormItem  className='my-1'>
                                 <FormLabel>Amount</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="100" {...field} />
+                                  <Input type='number' placeholder="100" {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>      )}/> 
                        )}
 
+<FormField
+          control={form.control}
+          name="userId"
+            rules={{
+              required : false
+            }}
+          render={({ field }) => (
+            
+                 <FormItem  className='my-4'>
+              <FormLabel>user id</FormLabel>
+              <FormControl>
+                <Input placeholder="charity donation.." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>      )}/> 
 
+{/*
 <FormField
           control={form.control}
         
@@ -200,6 +242,8 @@ export default function Create() {
 
 
           )}/> 
+
+          */}
 
            <div  className='my-4'>
 
