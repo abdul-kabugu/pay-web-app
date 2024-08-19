@@ -47,7 +47,7 @@ export default function PaymentLinks() {
   const [selectedValue, setselectedValue] = useState("")
   const {userProfile}  = useUserContext()
 
-  const PAYMENT_BASE_URL = "http://localhost:5000/auth/"
+  const PAYMENT_BASE_URL = "https://got-be.onrender.com/auth/"
 
 
    const getUserPayments =  async ()  =>  {

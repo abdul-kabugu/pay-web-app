@@ -51,7 +51,7 @@ export default function LinkPay() {
   const  router =  useRouter()
   const [isRedirecting, setisRedirecting] = useState(false)
 
-     const  PAY_BASE_URL = `http://localhost:5000/pay/`
+     const  PAY_BASE_URL = `https://got-be.onrender.com/pay/`
 
   const handleFetchLink  =   async ()  =>  {
     const res  =  await  axios.get(`${PAY_BASE_URL}link/${linkId}`)

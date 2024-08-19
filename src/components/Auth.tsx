@@ -11,16 +11,17 @@ import { AccountId, TransferTransaction } from '@hashgraph/sdk';
 
 import { MagicWallet,  } from '@/utils/magicWallet';
 import { MagicProvider } from '@/utils/magicProvider';
+import { magic } from '@/lib/create-magic-link-instance';
 
 
 
-const magic = new Magic('pk_live_C8037E2E6520BBDF', {
+/*const magic = new Magic('pk_live_C8037E2E6520BBDF', {
   extensions: [
     new HederaExtension({
       network: 'testnet',
     }),
   ],
-});
+});*/
 
 export default function Auth() {
   const [email, setEmail] = useState('');

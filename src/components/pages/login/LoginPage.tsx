@@ -36,7 +36,7 @@ useEffect(() => {
 
  console.log("user profile", userProfile)
     
-   const  BASE_URL  = "http://localhost:5000/auth/"
+   const  BASE_URL  = "https://got-be.onrender.com/auth/"
       const  handleReQuestOtp =   async ()  =>  {
         setisRequesting(true)
 

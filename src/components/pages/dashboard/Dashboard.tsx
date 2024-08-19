@@ -15,7 +15,7 @@ const Dashboard = ()  =>  {
   const {userProfile}  = useUserContext()
 
 
-    const AUTH_BASE_URL = "http://localhost:5000/auth/"
+    const AUTH_BASE_URL = "https://got-be.onrender.com/auth/"
 
      const fetchUserProfile =  async ()  =>   {
        const res = axios.get(`${AUTH_BASE_URL}user/${userProfile?.id}`)

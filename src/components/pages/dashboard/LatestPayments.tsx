@@ -44,7 +44,7 @@ export default function LatestPayments() {
   const [selectedValue, setselectedValue] = useState("")
   const {userProfile}  = useUserContext()
 
-  const PAYMENT_BASE_URL = "http://localhost:5000/pay/"
+  const PAYMENT_BASE_URL = "https://got-be.onrender.com/pay/"
 
 
    const getUserPayments =  async ()  =>  {

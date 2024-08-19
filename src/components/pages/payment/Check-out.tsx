@@ -54,16 +54,17 @@ import CountdownTimer from '@/components/CountDown';
 import { HEDERA_TESTNET } from '@/utils/constants';
 import { AnimatePresence, motion } from "framer-motion"
 import Image from 'next/image';
+import { magic } from '@/lib/create-magic-link-instance';
 
 
 
-const magic = new Magic('pk_live_C8037E2E6520BBDF', {
+/*const magic = new Magic('pk_live_C8037E2E6520BBDF', {
   extensions: [
     new HederaExtension({
       network: 'testnet',
     }),
   ],
-});
+});*/
 
 
 const formSchema = z.object({
@@ -96,7 +97,7 @@ export default function CheckOut() {
 const params =  useParams()
     const  router =  useRouter()
     const sessionId = params.sessionId
-  const  PAY_BASE_URL = `http://localhost:5000/pay/`
+  const  PAY_BASE_URL = `https://got-be.onrender.com/pay/`
   const { Canvas } = useQRCode();
 
   
@@ -117,7 +118,7 @@ const params =  useParams()
         
 
               // Initialize socket only once using useEffect
-  const socket = io('http://localhost:5000', { autoConnect: false });
+  const socket = io('https://got-be.onrender.com', { autoConnect: false });
 
 
   useEffect(() => {

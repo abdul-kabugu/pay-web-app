@@ -53,7 +53,7 @@ const router = useRouter()
 
 
 
-  const  BASE_URL  = "http://localhost:5000/auth/"
+  const  BASE_URL  = "https://got-be.onrender.com/auth/"
 
  
 

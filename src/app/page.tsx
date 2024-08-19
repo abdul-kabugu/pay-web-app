@@ -24,7 +24,7 @@ new Hbar(10);
   console.log("the hbar amont",  Hbar.from("1", HbarUnit.Tinybar))
 
 
-  const  payBaseUrl = `http://localhost:5000/pay/`
+  const  payBaseUrl = `https://got-be.onrender.com/pay/`
     const handleGenerateSession =  async ()  =>  {
          try {
            const  result = await   axios.post(`${payBaseUrl}session/6f1f7bc8-1d4b-43ce-b9c8-1aa3cd67a11b`)
@@ -72,7 +72,7 @@ new Hbar(10);
  }
 
   // Initialize socket only once using useEffect
-  const socket = io('http://localhost:5000', { autoConnect: false });
+  const socket = io('https://got-be.onrender.com', { autoConnect: false });
 
   useEffect(() => {
     socket.connect();
