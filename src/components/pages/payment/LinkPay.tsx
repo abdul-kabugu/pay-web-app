@@ -9,11 +9,12 @@ import { z } from "zod"
 import { toast } from '@/components/ui/use-toast'
 import axios from 'axios'
 import { Button } from "@/components/ui/button"
+import { Progress } from "@/components/ui/progress"
 import {
   useQuery,
   useMutation,
   useQueryClient,
-  QueryClient,r,
+  QueryClient,
 } from '@tanstack/react-query'
 import {
   Form,
@@ -42,9 +43,10 @@ const formSchema = z.object({
  })
 
 export default function LinkPay() {
-  const pathName = usePathname()
+
   const params =  useParams()
   const  router =  useRouter()
+  const [isRedirecting, setisRedirecting] = useState(false)
 
      const  PAY_BASE_URL = `http://localhost:5000/pay/`
 
@@ -60,26 +62,33 @@ export default function LinkPay() {
 
     const linkId = params.linkId
 
-   console.log("path name ",params.linkId)
+   console.log("path name ",data)
 
-      const  generateCheckouSession =  async (linkId : string)  =>   {
-         const sessionId =   await axios.post(`${PAY_BASE_URL}create-session/${linkId}`,  {amount : 20})
+      const  generateCheckouSession =  async (CHECKOUT_DATA)  =>   {
+         const sessionId =   await axios.post(`${PAY_BASE_URL}create-session/${linkId}`, CHECKOUT_DATA)
            return  sessionId
       }
 
-    const pushToChckOut =   async ()  =>  {
-        const  id =  await generateCheckouSession(linkId)
+    const pushToChckOut =   async (CHECKOUT_DATA)  =>  {
+        const  id =  await generateCheckouSession(CHECKOUT_DATA )
          if(id.status  === 200){
+          setisRedirecting(true)
      router.push(`/payment/checkout-session/${id.data.sessionId}`)
          }
-     
-
     }
+
+
+  
 
    useEffect(() => {
 
     if(isSuccess && data  &&  data.paymentType === "fixed"){
-      pushToChckOut()
+       const  DEFAULT_TOKEN_DATA  =  {
+          amount :  data?.amount,
+           coin  :  "HBAR",
+           network :  "Hedera"
+       }
+      pushToChckOut(DEFAULT_TOKEN_DATA)
        
     }
     
@@ -95,7 +104,7 @@ export default function LinkPay() {
      defaultValues: {
       amount : 1,
       coin :  "HBAR",
-      network : "hedera"
+      network : "Hedera"
       
      },
    })
@@ -107,13 +116,15 @@ export default function LinkPay() {
    const onSubmit  =  async (values: z.infer<typeof formSchema>)=>{
  
      try {
-       const  res  = await  axios.post(`${PAY_BASE_URL}session/${linkId}`,  values)
+       //const  res  = await  axios.post(`${PAY_BASE_URL}session/${linkId}`,  values)
+   console.log(values)
+          await pushToChckOut(values)
           toast({
-           title  : "New ;onk created",
+           title  : "New onk created",
            description :  "Youve  succefully created new payment link"
           })
  
-            console.log(res.status)
+            
        
      } catch (error) {
         console.log("error", error)
@@ -155,13 +166,14 @@ export default function LinkPay() {
         
           
   return (
+   
     <div  className='w-[450px]   bg-background rounded-3xl p-5'>
-      <ModeToggle  />
+   
     
     
      <div  className='p-6 my-2'>
-        <h1  className='font-semibold  text-xl text-center my-3'>Link title</h1>
-         <h2 className='text-muted-foreground  text-lg  text-center'>Link description</h2>
+        <h1  className='font-semibold  text-xl text-center mt-3 mb-1'>{data?.linkName}</h1>
+         <h2 className='text-muted-foreground  text-lg  text-center'>{data?.description}</h2>
      </div  >
 
       <div  className=' dark:bg-background  pt-5  p-3 rounded-t-3xl'>
@@ -183,7 +195,7 @@ export default function LinkPay() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="hedera">Hedera</SelectItem>
+                  <SelectItem value="Hedera">Hedera</SelectItem>
                 </SelectContent>
               </Select>
                  
@@ -202,11 +214,11 @@ export default function LinkPay() {
                  <Select onValueChange={field.onChange} defaultValue={field.value}  >
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Hbar" />
+                    <SelectValue placeholder="HBAR" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="hbar">Hbar</SelectItem>
+                  <SelectItem value="HBAR">HBAR</SelectItem>
                 </SelectContent>
               </Select>
                  
@@ -230,7 +242,7 @@ export default function LinkPay() {
               </FormControl>
               <FormMessage />
             </FormItem>      )}/> 
-            <Button type="submit" className='w-full' >Continue to pay</Button>
+            <Button type="submit" className='w-full' disabled={isRedirecting} >{isRedirecting   ? "redirecting to checkout.." : "Continue to pay"}</Button>
 
 </form>
 </Form>
@@ -238,7 +250,8 @@ export default function LinkPay() {
 
       </div>
 
-      <Button type="submit" className='w-full'  onClick={  ()  =>  printId()} >Continue to pay</Button>
+   
     </div>
+ 
   )
 }

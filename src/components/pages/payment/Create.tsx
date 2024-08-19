@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React,  {useState} from 'react'
 import Navbar from '../dashboard/Navbar'
 import { useForm, SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -26,11 +26,15 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select"
+  import { Textarea } from "@/components/ui/textarea"
 import axios from 'axios'
-import { toast } from '@/components/ui/use-toast'
+import { useToast } from '@/components/ui/use-toast'
+import { useRouter } from 'next/navigation'
  
 const formSchema = z.object({
-  linkName: z.string(),
+  linkName: z.string().min(5, {
+    message : "Title must be at least 5 characters"
+  }),
   paymentType : z.string(),
   amount : z.coerce.number().min(1, {
     message  : "Amount must be  greater than 1"
@@ -44,6 +48,9 @@ const formSchema = z.object({
   labelText : z.string(),
   redirectUrl : z.string(),
   userId : z.string(),
+  description : z.string().min(10,  {
+    message  : "Description  must be  at least 10 characters."
+  })
  // recieverWallet :  z.string()
 
 })
@@ -67,6 +74,10 @@ const formSchema = z.object({
 
 
 export default function Create() {
+  const [isRedirecting, setisRedirecting] = useState(false)
+  const {toast}  = useToast()
+
+  const  router =  useRouter()
 
 
       // 1. Define your form.
@@ -84,7 +95,8 @@ export default function Create() {
       paymentTag : "",
       labelText : "",
       //recieverWallet : "",
-      userId  :  ""
+      userId  :  "",
+      description : ""
      
     },
   })
@@ -94,21 +106,25 @@ export default function Create() {
  
   // 2. Define a submit handler.
   const onSubmit  =  async (values: z.infer<typeof formSchema>)=>{
+    setisRedirecting(true)
 
     try {
       const  res  = await  axios.post(`${PAY_BASE_URL}create-link`,  values)
          toast({
-          title  : "New ;onk created",
+          title  : "New payment link created",
           description :  "Youve  succefully created new payment link"
          })
-
+           
+        setisRedirecting(false)
+     router.push("/payment/payment-links")
            console.log(res.status)
       
     } catch (error) {
        console.log("error", error)
+       setisRedirecting(false)
        toast({
         title : "something went wrong",
-        description  : "something went wrong check consol"
+        description  : "something went wrong, report the issue to our customer support "
        })
       
     }
@@ -141,17 +157,36 @@ export default function Create() {
           control={form.control}
           name="linkName"
             rules={{
-              required : false
+              required : true
             }}
           render={({ field }) => (
             
                  <FormItem  className='my-4'>
-              <FormLabel>Link name</FormLabel>
+              <FormLabel>Link title</FormLabel>
               <FormControl>
                 <Input placeholder="charity donation.." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>      )}/> 
+
+            <FormField
+          control={form.control}
+          name="description"
+          rules={{required : true}}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Tell us a little bit about this payment link"
+                  className="resize-none"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
   
             <FormField
@@ -437,7 +472,7 @@ export default function Create() {
            
 
         
-        <Button type="submit" className='w-full'>Create payment link</Button>
+        <Button type="submit" className='w-full'  disabled={isRedirecting}>{isRedirecting  ?  "Creating payment link.."  :  "Create payment link"}</Button>
       </form>
     </Form>
                   </div>

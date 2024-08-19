@@ -18,7 +18,7 @@ import {
   TableRow,
   TableFooter
 } from "@/components/ui/table"
-import { HEDERA_LOGO_URL, invoicesTest } from '@/utils/constants'
+import { HEDERA_LOGO_URL, invoicesTest, WEBSITE_BASE_URL } from '@/utils/constants'
 
 import {
   Sheet,
@@ -35,27 +35,30 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Ellipsis } from 'lucide-react'
 import Paymentdetails from '@/components/sheet/payment-details'
+import { truncateText } from '@/lib/truncateTxt'
+import Linkdetails from '@/components/sheet/link-details'
 
 
 
-export default function LatestPayments() {
+export default function PaymentLinks() {
   const [selectedValue, setselectedValue] = useState("")
   const {userProfile}  = useUserContext()
 
-  const PAYMENT_BASE_URL = "http://localhost:5000/pay/"
+  const PAYMENT_BASE_URL = "http://localhost:5000/auth/"
 
 
    const getUserPayments =  async ()  =>  {
-  const  res =  axios.get(`${PAYMENT_BASE_URL}payments/${userProfile?.id}`)
+  const  res =  axios.get(`${PAYMENT_BASE_URL}user/${userProfile?.id}/payment-links`)
   return (await res).data
    }
 
-    const {data, isError, isLoading}  = useQuery({
+    const {data, isError, isLoading, error}  = useQuery({
       queryKey : ['payments'],
       queryFn : getUserPayments
     })
 
      console.log("user payments", data)
+     console.log("user payments error", error)
 
 
          // Assuming the date is in the format "2024-08-17T05:46:24.374Z" and stored in data.date
@@ -70,47 +73,36 @@ export default function LatestPayments() {
 
   return (
     <div  className='w-full px-1'>
-       <div className='w-full flex  items-center justify-between my-4'>
-         <h1 className='font-bold text-xl'>Recent payments</h1>
-
-         <Select onValueChange={(e)  => setselectedValue(e)}  >
-  <SelectTrigger className="w-[180px]">
-    <SelectValue placeholder="All type" />
-  </SelectTrigger>
-  <SelectContent className='border-accent'>
-    <SelectItem value="one-time">One time</SelectItem>
-    <SelectItem value="subscriptions">Subscptions</SelectItem>
   
-  </SelectContent>
-</Select>
-       </div>
+
+
 
       <div>
       <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
+      
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px] ">Date</TableHead>
-          <TableHead>Status</TableHead>
+          <TableHead className="w-[170px] ">Created on</TableHead>
+          <TableHead>Url</TableHead>
           <TableHead>Title</TableHead>
           <TableHead className="text-right">Amount</TableHead>
           <TableHead className="w-[100px] text-right">More</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data?.payments?.map((item, i) => (
+        {data?.paymentLinks?.map((item, i) => (
           <TableRow key={i}    className=''>
            
             <TableCell className="font-medium text-muted-foreground">{ formatDate( item.createdAt)  }</TableCell>
            
-            <TableCell> <div className='bg-green-500/25 p-0.5 rounded-lg inline-flex capitalize text-green-700 text-xs'>{item.paymentStatus}</div></TableCell>
+            <TableCell className='text-sm text-muted-foreground'> {  truncateText( `${WEBSITE_BASE_URL}payment/payment-links/${item._id}`, 20,36, 10)}</TableCell>
             <TableCell>
               <p className='font-medium text-muted-foreground'>
-              {item.paymentLinkId.linkName}
+              {item.linkName}
                 </p></TableCell>
-            <TableCell className="text-right"> <div className='flex space-x-2 items-center font-medium text-muted-foreground'>
+            <TableCell className="text-right flex items-center justify-end"> <div className='flex text-right space-x-2 items-center font-medium text-muted-foreground'>
               <Image  src={HEDERA_LOGO_URL} width={70} height={70} alt='hedera logo' className='rounded-full w-4 h-4' />
-              <p>{item.amount} HBAR</p>
+              <p>{item.amount ?  `${item.amount} HBAR`  :  "Any amount"} </p>
               </div></TableCell>
             <TableCell className="text-right">
             <Sheet>
@@ -123,7 +115,7 @@ export default function LatestPayments() {
     <SheetHeader  className=' border-b'>
       <SheetTitle>Payments</SheetTitle>
    </SheetHeader>
-   <Paymentdetails payment={item} time={ formatDate( item.createdAt) }   />
+   <Linkdetails payment={item} time={ formatDate( item.createdAt) }   />
   </SheetContent>
 </Sheet>
             </TableCell>
