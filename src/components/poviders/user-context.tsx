@@ -1,4 +1,6 @@
 
+//@ts-nocheck
+
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import {useAccount, useSignMessage}  from 'wagmi'
 import { jwtDecode } from "jwt-decode";

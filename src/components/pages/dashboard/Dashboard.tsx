@@ -9,8 +9,9 @@ import Home from './Home'
 import { useUserContext } from '@/components/poviders/user-context'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
+import withAuth from '@/components/middleware/auth-middleware'
 
-export default function Dashboard() {
+const Dashboard = ()  =>  {
   const {userProfile}  = useUserContext()
 
 
@@ -40,3 +41,5 @@ export default function Dashboard() {
     </div>
   )
 }
+
+export default  withAuth(Dashboard)

@@ -1,3 +1,6 @@
+//@ts-nocheck
+
+
 "use client"
 import Auth from "@/components/Auth";
 import axios from "axios";

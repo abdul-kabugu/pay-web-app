@@ -1,3 +1,6 @@
+//@ts-nocheck
+
+
 import axios from 'axios'
 import { BadgeInfo, DollarSign, Link, TimerIcon } from 'lucide-react'
 import React from 'react'

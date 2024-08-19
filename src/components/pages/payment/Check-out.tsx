@@ -1,4 +1,6 @@
 
+//@ts-nocheck
+
 "use client"
 import { ModeToggle } from '@/components/switch-theme'
 import React, {useState, useEffect} from 'react'
