@@ -218,8 +218,7 @@ const params =  useParams()
 
                      // RECIEVER  TESTER
 
-                     const  RECIEVER_TEST = "0.0.4660084"
-                     const SEND_AMOUNT_TEST  = 1
+                     
 
                    //  HANDLE  HEDERA  TRANSAFER TOKENS
 
@@ -261,6 +260,29 @@ const params =  useParams()
                           })
                            console.log("transaction part error", error)
                     }}
+
+                    //  HANDLE  HEDERA  TRANSAFER TOKENS
+
+                     const handleSendReciept =  async ()  =>  {
+                      const EMAIL_BASE_URL =  "https://got-be.onrender.com/emails/send-reciept"
+
+                      try {
+                        const res =  axios.post(EMAIL_BASE_URL, {
+                          to  : userMetadata?.email,
+                           amount :  data?.session?.amount,
+                           receiver_wallet : data?.reciever?.userId?.wallet,
+                           payment_link  : data?.session?.paymentLinkId
+                        })
+                        
+                      } catch (error) {
+
+                         console.error("something went wrong when sending reciept", error)
+                        
+                      }
+                     }
+
+                      
+
                   
 
                       const  handlePay = async ()  =>  {
@@ -316,7 +338,7 @@ const params =  useParams()
                   title  : "New ;onk created",
                   description :  "Youve  succefully created new payment link"
                  })*/
-        
+                  await   handleSendReciept()
                   
                    console.log(res.status)
               
@@ -331,8 +353,7 @@ const params =  useParams()
             }
               
         
-                
-            console.log("the value", values)
+            
            
           }
   
@@ -784,7 +805,7 @@ const params =  useParams()
                        <div  className='  w-full items-center justify-center  '>
                      
               
-                <div className='border-b pb-6 pt-5 flex flex-col justify-center items-center '>
+                <div className=' pb-6 pt-5 flex flex-col justify-center items-center '>
                 <Loader2  className='w-16 h-16 mb-4 text-blue-500 animate-spin' />
                     <h1  className='text-xl leading-snug font-semibold text-center'>Processing Your Payment </h1>
                      <h2 className='text-muted-foreground text-sm text-center'></h2>
@@ -828,9 +849,7 @@ const params =  useParams()
          
           </div>
 
-     <button  onClick={()  => settestTruth(! testTruth)}>toggle</button>
-     <button className='' onClick={() => logout()}>logout</button>
-       <h1>{! status  ?  "pending"  :  status?.status}</h1>
+  
 
     </div>
   )
