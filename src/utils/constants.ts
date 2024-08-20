@@ -4,9 +4,10 @@ import {
     IconSettings,
     IconUserBolt,
     IconHome,
+    IconInvoice,
    
   } from "@tabler/icons-react";
-import { BadgeDollarSign , Link, House, Settings} from "lucide-react";
+import { BadgeDollarSign , Link, House, Settings, LayoutDashboard, Link2, Flame, Code2, TrendingUp} from "lucide-react";
 
 
 
@@ -92,6 +93,43 @@ import { BadgeDollarSign , Link, House, Settings} from "lucide-react";
       paymentMethod: "Credit Card",
     },
   ]
+
+
+  export const features = [
+    {
+      icone : LayoutDashboard,
+      title : "Powerful dashboard",
+      description : "Easily manage your payments, API keys, and keep your business running smoothly with our intuitive dashboard.",
+    },
+    {
+      icone : Link2,
+      title : "Payment links",
+      description : "Generate payment links in seconds and receive payments seamlessly—no fuss, no hassle.",
+    },
+    {
+      icone : IconInvoice,
+      title : "Create and Send Invoices with Ease",
+      description : "Design professional invoices quickly and manage payments effortlessly—streamlined for your convenience",
+    },
+
+    {
+      icone : Flame,
+      title : "Instant settlement",
+      description : "munaPay never holds your funds. They are transferred to your Hedera wallet instantly..",
+    },
+    {
+      icone : Code2,
+      title : "Easy and powerful SDKs",
+      description : "Quickly integrate with your business in a few lines of code and get your pre-built and hosted checkout page",
+    },
+    {
+      icone : TrendingUp,
+      title : "Optimised for conversion",
+      description : "Create frictionless checkout experiences with one click payments and QR codes.",
+    },
+  ]
+
+  export const MUNA_PAY_INTRO_TEXT = `MunaPay is a payment solution for individuals and organisations to start accepting payments on Hedera. With a low-code solution, mobile-native design, and support for various payment methods, we make it easy for merchants to upgrade their payment system with crypto.`
 
 
 

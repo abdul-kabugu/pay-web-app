@@ -8,7 +8,7 @@ export default function Navbar() {
      <div className='max-w-7xl mx-auto w-full flex items-center justify-between'>
         <div>LOGO</div>
          <div>
-            <ModeToggle  />
+           
             <Link href={`/login`} className='border p-2 rounded-xl'>
               Get started
             </Link>
