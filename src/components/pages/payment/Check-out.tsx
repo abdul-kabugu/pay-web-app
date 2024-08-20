@@ -43,7 +43,7 @@ import { z } from "zod"
 import axios from 'axios'
 import { Button } from "@/components/ui/button"
 import { useParams, useRouter } from 'next/navigation'
-import { AlertCircle, CheckCheckIcon, CircleCheckBig, Loader2, LoaderPinwheel, Mail, MessageCircleWarningIcon, QrCode, TimerIcon, Wallet, X } from 'lucide-react'
+import { AlertCircle, CheckCheckIcon, CircleCheckBig, Loader, Loader2, LoaderPinwheel, Mail, MessageCircleWarningIcon, QrCode, TimerIcon, Wallet, X } from 'lucide-react'
 import { useToast } from '@/components/ui/use-toast'
 import { Magic } from 'magic-sdk';
 import { HederaExtension } from '@magic-ext/hedera';
@@ -387,23 +387,28 @@ const params =  useParams()
     const  SESSION_EXP_TIME =  data?.session?.durationTime
         
   
-      if(error){
-        return(
-          <div className='w-full h-screen flex items-center justify-center'>
+    if(error){
+      return(
+        <div className='w-full h-screen flex items-center justify-center'>
 
-            <p>howdy  something  went  wrong</p>
-          </div>
-        )
-      }
+          <p className='font-semibold text-center'>Something went wrong please check your connection and reload</p>
+          <p className='text-muted-foreground text-center'>Or reach out to our customer suport</p>
+        </div>
+      )
+    }
 
-      if(isLoading  ||  isUserLoading){
-        return(
-          <div className='w-full h-screen flex items-center justify-center'>
+    if(isLoading){
+      return(
+        <div className='w-full h-screen flex items-center justify-center'>
 
-            <p>howdy  still loading</p>
-          </div>
-        )
-      }
+         <Loader
+
+className='w-24 h-24 text-indigo-500 animate-spin'
+/>
+        </div>
+      )
+    }
+
 
 
        

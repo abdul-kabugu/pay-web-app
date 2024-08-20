@@ -59,6 +59,8 @@ export default function LatestPayments() {
 
      console.log("user payments", data)
 
+    
+
 
          // Assuming the date is in the format "2024-08-17T05:46:24.374Z" and stored in data.date
  
@@ -89,7 +91,7 @@ export default function LatestPayments() {
 
       <div>
       <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
+      <TableCaption>A list of your recent payments.</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px] ">Date</TableHead>

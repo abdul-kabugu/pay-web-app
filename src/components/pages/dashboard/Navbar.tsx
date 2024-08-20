@@ -23,9 +23,10 @@ import { navLinks } from '@/utils/constants'
 import { MenuIcon, UserCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { truncateText } from '@/lib/truncateTxt'
+import Image from 'next/image'
   
 type Props = {
-  email : any
+  email ?: any
 }
 
 export default function Navbar({email} : Props) {
@@ -54,7 +55,11 @@ export default function Navbar({email} : Props) {
 
         </div>
 
-          <p>Logo</p>
+        <Link href={`/`} className='flex items-center space-x-1'>
+        <Image src={`/img/logo.png`} width={60} height={60} alt='logo' className='w-9 h-9 rounded-full'  />
+        <p className='font-bold'>MunaPay</p>
+
+        </Link>
         </div>
         <div  className='flex items-center  space-x-3'>
         <ModeToggle  />

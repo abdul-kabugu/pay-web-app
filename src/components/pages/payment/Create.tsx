@@ -30,6 +30,7 @@ import {
 import axios from 'axios'
 import { useToast } from '@/components/ui/use-toast'
 import { useRouter } from 'next/navigation'
+import withAuth from '@/components/middleware/auth-middleware'
  
 const formSchema = z.object({
   linkName: z.string().min(5, {
@@ -73,7 +74,7 @@ const formSchema = z.object({
 }*/
 
 
-export default function Create() {
+const  Create = () =>  {
   const [isRedirecting, setisRedirecting] = useState(false)
   const {toast}  = useToast()
 
@@ -482,3 +483,6 @@ export default function Create() {
     </div>
   )
 }
+
+
+export default withAuth(Create)

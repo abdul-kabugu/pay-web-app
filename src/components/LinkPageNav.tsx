@@ -24,7 +24,7 @@ export default function LinkPageNav({title}: Props) {
 
      <DropdownMenu>
 <DropdownMenuTrigger asChild>
-<Button  variant={"secondary"}   className='bg-blue-500  text-white flex items-center space-x-2'>
+<Button  variant={"secondary"}   className='bg-indigo-500  text-white flex items-center space-x-2'>
        <Plus  className='w-4 h-4' />
 <p>Create payment</p>
           </Button>
@@ -47,8 +47,8 @@ export default function LinkPageNav({title}: Props) {
       <IconInvoice className='w-6 h-6' />
 
        <div>
-          <h1  className='font-semibold '>Payment link</h1>
-           <p  className='text-muted-foreground text-sm'>Accapte pne-time or recurring payment from anyone</p>
+          <h1  className='font-semibold '>Invoice</h1>
+           <p  className='text-muted-foreground text-sm'>Collect one time payment from specific customer</p>
        </div>
 
  </Link>

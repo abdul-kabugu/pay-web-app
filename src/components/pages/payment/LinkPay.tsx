@@ -38,6 +38,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Loader } from 'lucide-react'
 
 const formSchema = z.object({
   amount: z.coerce.number(),
@@ -149,7 +150,8 @@ export default function LinkPay() {
             return(
               <div className='w-full h-screen flex items-center justify-center'>
 
-                <p>howdy  something  went  wrong</p>
+                <p className='font-semibold text-center'>Something went wrong please check your connection and reload</p>
+                <p className='text-muted-foreground text-center'>Or reach out to our customer suport</p>
               </div>
             )
           }
@@ -158,7 +160,10 @@ export default function LinkPay() {
             return(
               <div className='w-full h-screen flex items-center justify-center'>
 
-                <p>howdy  still loading</p>
+               <Loader
+
+  className='w-24 h-24 text-indigo-500 animate-spin'
+/>
               </div>
             )
           }
