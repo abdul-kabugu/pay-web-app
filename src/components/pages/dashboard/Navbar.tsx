@@ -22,9 +22,13 @@ import {
 import { navLinks } from '@/utils/constants'
 import { MenuIcon, UserCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { truncateText } from '@/lib/truncateTxt'
   
+type Props = {
+  email : any
+}
 
-export default function Navbar() {
+export default function Navbar({email} : Props) {
   return (
     <div  className='  w-full sticky top-0 bg-background border-b border-border h-[60px] mb-2  flex items-center justify-center z-40 '>
         <div  className='w-full max-w-[1500px]  m-auto  flex justify-between  items-center'>
@@ -67,11 +71,11 @@ export default function Navbar() {
       <DropdownMenuContent align="end">
         <DropdownMenuItem>
            
-              <p>kabugu</p>
+              <p>{email && truncateText(email, 20, 4, 9)}</p>
            
         </DropdownMenuItem>
         <DropdownMenuItem >
-          <Link  href={'#'} >
+          <Link  href={'/settings'} >
           <p>Settings</p>
           </Link>
         

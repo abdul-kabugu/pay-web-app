@@ -36,7 +36,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useUserContext } from '@/components/poviders/user-context'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
-import { Ellipsis } from 'lucide-react'
+import { Copy, Ellipsis } from 'lucide-react'
 import Paymentdetails from '@/components/sheet/payment-details'
 import { truncateText } from '@/lib/truncateTxt'
 import Linkdetails from '@/components/sheet/link-details'
@@ -50,6 +50,9 @@ export default function PaymentLinks() {
   const PAYMENT_BASE_URL = "https://got-be.onrender.com/auth/"
 
 
+    const copyLink = (link)  => {
+      navigator.clipboard.writeText(link)
+    }
    const getUserPayments =  async ()  =>  {
   const  res =  axios.get(`${PAYMENT_BASE_URL}user/${userProfile?.id}/payment-links`)
   return (await res).data
@@ -98,12 +101,17 @@ export default function PaymentLinks() {
            
             <TableCell className="font-medium text-muted-foreground">{ formatDate( item.createdAt)  }</TableCell>
            
-            <TableCell className='text-sm text-muted-foreground'> {  truncateText( `${WEBSITE_BASE_URL}payment/payment-links/${item._id}`, 20,36, 10)}</TableCell>
+            <TableCell className='text-sm text-muted-foreground'>
+              <div className='flex items-center space-x-3'>
+              <p> {  truncateText( `${WEBSITE_BASE_URL}payment/payment-link/${item._id}`, 20,36, 10)} </p>
+              <Copy   className='text-muted-foreground w-4 h-4 cursor-pointer' onClick={() => copyLink(`${WEBSITE_BASE_URL}payment/payment-link/${item._id}`)} />
+               </div>
+               </TableCell>
             <TableCell>
               <p className='font-medium text-muted-foreground'>
               {item.linkName}
                 </p></TableCell>
-            <TableCell className="text-right flex items-center justify-end"> <div className='flex text-right space-x-2 items-center font-medium text-muted-foreground'>
+            <TableCell className="text-right flex items-end justify-end"> <div className='flex text-right space-x-2 items-center font-medium text-muted-foreground'>
               <Image  src={HEDERA_LOGO_URL} width={70} height={70} alt='hedera logo' className='rounded-full w-4 h-4' />
               <p>{item.amount ?  `${item.amount} HBAR`  :  "Any amount"} </p>
               </div></TableCell>

@@ -110,7 +110,7 @@ export default function LatestPayments() {
               <p className='font-medium text-muted-foreground'>
               {item.paymentLinkId.linkName}
                 </p></TableCell>
-            <TableCell className="text-right"> <div className='flex space-x-2 items-center font-medium text-muted-foreground'>
+            <TableCell className="text-right"> <div className='flex space-x-2 items-center justify-end font-medium text-muted-foreground'>
               <Image  src={HEDERA_LOGO_URL} width={70} height={70} alt='hedera logo' className='rounded-full w-4 h-4' />
               <p>{item.amount} HBAR</p>
               </div></TableCell>

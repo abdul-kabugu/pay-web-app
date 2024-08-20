@@ -29,7 +29,7 @@ const Dashboard = ()  =>  {
    console.log("the user", data)
   return (
     <div  className='w-full  '>
-        <Navbar   />
+        <Navbar  email={data?.user?.email} />
            
       <div  className=' w-full max-w-[1600px]   min-h-screen  flex space-x-3    mx-auto'>
      <SideBar2  />
