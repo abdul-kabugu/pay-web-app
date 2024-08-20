@@ -6,7 +6,7 @@ import {
     IconHome,
    
   } from "@tabler/icons-react";
-import { BadgeDollarSign , Link, House} from "lucide-react";
+import { BadgeDollarSign , Link, House, Settings} from "lucide-react";
 
 
 
@@ -20,7 +20,8 @@ import { BadgeDollarSign , Link, House} from "lucide-react";
     export const  HEDERA_LOGO_URL = "https://pbs.twimg.com/profile_images/1657693585234337792/0Y5Y6bnW_400x400.jpg"
 
 
-    export const WEBSITE_BASE_URL = "https://mainnet.mirrornode.hedera.com/"
+    export const WEBSITE_BASE_URL = "https://www.munapay.xyz/"
+    export const API_BASE_URL =  "https://got-be.onrender.com/"
 
  export  const navLinks = [
     {
@@ -40,9 +41,9 @@ import { BadgeDollarSign , Link, House} from "lucide-react";
       icon: Link ,
     },
     {
-      label: "Logout",
-      href: "#",
-      icon: IconArrowLeft 
+      label: "Settings",
+      href: "/settings",
+      icon: Settings 
     }
   ]
 

@@ -1,4 +1,4 @@
-"use client"
+
 
 import Navbar from '@/components/pages/dashboard/Navbar'
 import SideBar2 from '@/components/pages/dashboard/Sidebar2'

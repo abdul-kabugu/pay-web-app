@@ -51,10 +51,11 @@ import { AccountId, TransferTransaction, Hbar, HbarUnit, HbarAllowance } from '@
 import { MagicWallet,  } from '@/utils/magicWallet';
 import { MagicProvider } from '@/utils/magicProvider';
 import CountdownTimer from '@/components/CountDown';
-import { HEDERA_TESTNET } from '@/utils/constants';
+import { HEDERA_TESTNET, WEBSITE_BASE_URL } from '@/utils/constants';
 import { AnimatePresence, motion } from "framer-motion"
 import Image from 'next/image';
 import { magic } from '@/lib/create-magic-link-instance';
+import OnChainDtaNav from './OnChainDtaNav';
 
 
 
@@ -93,11 +94,13 @@ export default function CheckOut() {
     const [balances, setbalances] = useState()
     const [isCheckingOut, setisCheckingOut] = useState(false)
     const [testTruth, settestTruth] = useState(true)
+ 
     const {toast}  = useToast()
 const params =  useParams()
     const  router =  useRouter()
     const sessionId = params.sessionId
   const  PAY_BASE_URL = `https://got-be.onrender.com/pay/`
+   const  LOCAL_BASE_URL  = "http://localhost:5000/pay/"
   const { Canvas } = useQRCode();
 
   
@@ -229,8 +232,8 @@ const params =  useParams()
                       
                         let transaction = await new TransferTransaction()
                           .setNodeAccountIds([new AccountId(3)])
-                          .addHbarTransfer(publicAddress, -1 * SEND_AMOUNT_TEST)
-                          .addHbarTransfer(RECIEVER_TEST, SEND_AMOUNT_TEST)
+                          .addHbarTransfer(publicAddress, -1 * data?.session?.amount)
+                          .addHbarTransfer(data?.reciever?.userId?.wallet, data?.session?.amount)
                           .freezeWithSigner(magicWallet);
                     
                         transaction = await transaction.signWithSigner(magicWallet);
@@ -291,6 +294,7 @@ const params =  useParams()
         
             try {
               const txHash =  await  handleTransfer()
+              settxHash(txHash)
               const valueData =  {
                    payerEmail : values.payerEmail,
                    payerName : values.payerName,
@@ -305,6 +309,7 @@ const params =  useParams()
   
                    },
                    transactionHash : txHash
+                
               }
               const  res  = await  axios.post(`${PAY_BASE_URL}check-out/${sessionId}`,  valueData)
                 /* toast({
@@ -370,14 +375,14 @@ const params =  useParams()
         )
       }
 
-    /*  if(isLoading  ||  isUserLoading){
+      if(isLoading  ||  isUserLoading){
         return(
           <div className='w-full h-screen flex items-center justify-center'>
 
             <p>howdy  still loading</p>
           </div>
         )
-      }*/
+      }
 
 
        
@@ -388,7 +393,7 @@ const params =  useParams()
             console.log("the  fromatted balance", formattedBalance1)
 
               const  getPaymentState =  ()  =>  {
-                if(! status && ! isCheckingOut){
+                if(! status && ! isCheckingOut   ){
                   return(
                   <>
                     <div  className='flex  justify-between items-center  my-4 mb-6'>
@@ -612,7 +617,7 @@ const params =  useParams()
                          <div  className='my-4  flex  items-center justify-center  flex-col'>
                              <div  className=''>
                       <Canvas
-                       text='https://github.com/Bunlong/next-qrcode'
+                       text={`${WEBSITE_BASE_URL}payment/checkout-session/${sessionId}`}
                        options={{
                          errorCorrectionLevel: 'M',
                          margin: 2,
@@ -700,26 +705,26 @@ const params =  useParams()
 
   <div className='border-b pb-6 pt-5 flex flex-col justify-center items-center '>
   <CircleCheckBig  className='w-10 h-10 mb-4 text-green-600' />
-      <h1  className='text-xl leading-snug font-semibold text-center'>Payment made  succefully</h1>
-       <h2 className='text-muted-foreground text-sm text-center'>Some  description for  ppayment success</h2>
+      <h1  className='text-xl leading-snug font-semibold text-center'>Payment Confirmed!</h1>
+       <h2 className='text-muted-foreground text-xs text-center'>Thank you for your payment.  Your transaction has been securely processed</h2>
   </div>
 
    <div className=' mt-4 border-b pb-4 p-2'>
     <div className='flex justify-between w-full my-3'>
       <h3 className='font-semibold text-sm '>Amount</h3>
-       <h4 className='text-muted-foreground'>value</h4>
+       <h4 className='text-muted-foreground'>{data?.session.amount}</h4>
     </div>
     <div className='flex justify-between w-full my-3'>
       <h3 className='font-semibold text-sm'>From</h3>
-       <h4 className='text-muted-foreground text-sm'>value</h4>
+       <h4 className='text-muted-foreground text-sm'>{userMetadata?.publicAddress}</h4>
     </div>
     <div className='flex justify-between w-full my-3'>
       <h3 className='font-semibold text-sm'>To</h3>
-       <h4 className='text-muted-foreground text-sm'>value</h4>
+       <h4 className='text-muted-foreground text-sm'>{data?.reciever?.userId.wallet  ? data?.reciever?.userId?.wallet  : "-" }</h4>
     </div>
     <div className='flex justify-between w-full my-3'>
       <h3 className='font-semibold text-sm'>Tx hash</h3>
-       <h4 className='text-muted-foreground text-sm'>value</h4>
+       <h4 className='text-muted-foreground text-sm'>{txHash ? txHash : "-"}</h4>
     </div>
      
    </div>
@@ -733,14 +738,14 @@ const params =  useParams()
       </motion.div>
       </AnimatePresence>
      )
-                }else if(status &&  status.status  === "FAILED"  && status.sessionId === sessionId){
+                }else if(status &&  status.status  === "FAILED"  && status.sessionId === sessionId ){
                   return(
                     <AnimatePresence>
                     < motion.div  
                     className='flex items-center justify-center  w-full p-5 rounded-xl border  '
-                    initial={{ y : 20 }}
-                    transition={{ease : "easeInOut", duration : 3}}
-                    animate={{ y: -20 }}
+                    initial={{ y : 10 }}
+                    transition={{ease : "easeInOut", duration : 2}}
+                    animate={{ y: -10 }}
                     exit={{ opacity: 0 }}
                     key={"error"}
                     >
@@ -749,15 +754,15 @@ const params =  useParams()
               
                 <div className='border-b pb-6 pt-5 flex flex-col justify-center items-center '>
                 <X  className='w-10 h-10 mb-4 text-red-600' />
-                    <h1  className='text-xl leading-snug font-semibold text-center'>Session expired</h1>
-                     <h2 className='text-muted-foreground text-sm text-center'>Session have been expired</h2>
+                    <h1  className='text-xl leading-snug font-semibold text-center'>Oops, Something Went Wrong!</h1>
+                     <h2 className='text-muted-foreground text-xs text-center'>Unfortunately, your payment didn’t go through. Please check your balance and try again later, or reach out to our customer support for assistance.</h2>
                 </div>
               
                  
               
                    <div>
                      
-                     <h1 className=' text-xs text-center mt-4 text-muted-foreground'>Each session expires after 30 mins</h1>
+                     <h1 className=' text-xs text-center mt-4 text-muted-foreground'>Need assistance  contact our customer support</h1>
                    </div>
                        </div>
               
@@ -765,14 +770,14 @@ const params =  useParams()
                     </AnimatePresence>
                    )
 
-                }else if(! status && isCheckingOut){
+                }else if( !status && isCheckingOut ){
                   return(
                     <AnimatePresence>
                     < motion.div  
                     className='flex items-center justify-center  w-full p-5 rounded-xl border  '
-                    initial={{ y : 20 }}
-                    transition={{ease : "easeInOut", duration : 3}}
-                    animate={{ y: -20 }}
+                    initial={{ y : 5 }}
+                    transition={{ease : "easeIn", duration : 2}}
+                    animate={{ y: -5 }}
                     exit={{ opacity: 0 }}
                     key={"pending"}
                     >
@@ -780,8 +785,8 @@ const params =  useParams()
                      
               
                 <div className='border-b pb-6 pt-5 flex flex-col justify-center items-center '>
-                <Loader2  className='w-16 h-16 mb-4 text-green-600 animate-spin' />
-                    <h1  className='text-xl leading-snug font-semibold text-center'>Processing payment </h1>
+                <Loader2  className='w-16 h-16 mb-4 text-blue-500 animate-spin' />
+                    <h1  className='text-xl leading-snug font-semibold text-center'>Processing Your Payment </h1>
                      <h2 className='text-muted-foreground text-sm text-center'></h2>
                 </div>
               
@@ -798,7 +803,7 @@ const params =  useParams()
             
   return (
     <div className=' max-w-5xl mx-auto    my-4'>
-        <ModeToggle  />
+     <OnChainDtaNav walletAddress={userMetadata?.publicAddress} balance={formattedBalance1} />
         <div  className='flex flex-col md:flex-row lg:space-x-1 '>
           <div  className='flex-1  md:h-screen border-b md:border-b-0  border-r    p-6  '>
               <h1  className=' font-bold hidden'>Pay :  <span  className='text-SM font-semibold'>reciever name</span></h1>
@@ -824,6 +829,7 @@ const params =  useParams()
           </div>
 
      <button  onClick={()  => settestTruth(! testTruth)}>toggle</button>
+     <button className='' onClick={() => logout()}>logout</button>
        <h1>{! status  ?  "pending"  :  status?.status}</h1>
 
     </div>

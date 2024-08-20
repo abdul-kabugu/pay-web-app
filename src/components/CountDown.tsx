@@ -4,7 +4,7 @@
 "use client"
 
 
-import { MailWarning, TimerIcon } from 'lucide-react';
+import { BadgeAlert, MailWarning, TimerIcon } from 'lucide-react';
 import { ExtensionWarning } from 'magic-sdk';
 import { useEffect, useState } from 'react';
 
@@ -42,7 +42,7 @@ function CountdownTimer({ expTime }: Props) {
         {
             timeLeft  ===  "Expired"  ?  (
               <div className='inline-flex  py-1 md:py-1.5 px-2 md:px-3 rounded-xl items-center justify-center  space-x-1  bg-muted'>
-               <MailWarning className='w-3 h-3 lg:w-4 lg:h-4'   />
+               <BadgeAlert className='w-3 h-3 lg:w-4 lg:h-4'   />
                <p className='text-muted-foreground text-sm'>session expired</p>
                </div>
 

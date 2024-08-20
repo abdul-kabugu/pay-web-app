@@ -122,10 +122,7 @@ export default function LinkPay() {
        //const  res  = await  axios.post(`${PAY_BASE_URL}session/${linkId}`,  values)
    console.log(values)
           await pushToChckOut(values)
-          toast({
-           title  : "New onk created",
-           description :  "Youve  succefully created new payment link"
-          })
+        
  
             
        
@@ -175,8 +172,8 @@ export default function LinkPay() {
     
     
      <div  className='p-6 my-2'>
-        <h1  className='font-semibold  text-xl text-center mt-3 mb-1'>{data?.linkName}</h1>
-         <h2 className='text-muted-foreground  text-lg  text-center'>{data?.description}</h2>
+        <h1  className='font-semibold  text-xl text-center mt-3 mb-1'>{data?.paymentLink?.linkName}</h1>
+         <h2 className='text-muted-foreground  text-lg  text-center'>{data?.paymentLink?.description}</h2>
      </div  >
 
       <div  className=' dark:bg-background  pt-5  p-3 rounded-t-3xl'>
@@ -245,7 +242,7 @@ export default function LinkPay() {
               </FormControl>
               <FormMessage />
             </FormItem>      )}/> 
-            <Button type="submit" className='w-full' disabled={isRedirecting} >{isRedirecting   ? "redirecting to checkout.." : "Continue to pay"}</Button>
+            <Button type="submit" className='w-full' disabled={isRedirecting} >{isRedirecting   ? "loading.." : "Continue to pay"}</Button>
 
 </form>
 </Form>
